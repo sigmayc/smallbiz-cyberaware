@@ -1,34 +1,38 @@
-const Parser = require('rss-parser');
+const axios = require('axios');
+const cheerio = require('cheerio');
 const admin = require('firebase-admin');
-const parser = new Parser();
 
-// Initialize Firebase with the secret key from GitHub
 const serviceAccount = JSON.parse(process.env.FIREBASE_KEY);
 admin.initializeApp({
   credential: admin.credential.cert(serviceAccount),
-  databaseURL: "https://your-project-id.firebaseio.com" // Change to your DB URL
+  databaseURL: "https://your-project-id.firebaseio.com" // Update this!
 });
 
 async function poll() {
-  const feed = await parser.parseURL('https://www.csa.gov.sg/rss/alerts');
-  const db = admin.database();
+  try {
+    const { data } = await axios.get('https://www.csa.gov.sg/alerts-and-advisories/alerts');
+    const $ = cheerio.load(data);
+    const db = admin.database();
 
-  for (const item of feed.items) {
-    const id = item.guid || item.title.replace(/\s+/g, '_');
-    const ref = db.ref('alerts').child(id);
-    
-    const snapshot = await ref.once('value');
-    if (!snapshot.exists()) {
-      await ref.set({
-        title: item.title,
-        description: item.contentSnippet,
-        date: item.pubDate,
-        link: item.link
-      });
-      console.log("Added new alert: " + item.title);
-    }
+    // Look for the alert items in the list
+    $('.views-row').each(async (i, el) => {
+      const title = $(el).find('.views-field-title').text().trim();
+      const date = $(el).find('.views-field-created').text().trim();
+      const link = "https://www.csa.gov.sg" + $(el).find('a').attr('href');
+      
+      if (title) {
+        const id = title.replace(/[.#$/[\]]/g, "_");
+        const ref = db.ref('alerts').child(id);
+        const snapshot = await ref.once('value');
+        
+        if (!snapshot.exists()) {
+          await ref.set({ title, date, link });
+          console.log("Added: " + title);
+        }
+      }
+    });
+  } catch (error) {
+    console.error("Error scraping:", error);
   }
-  process.exit();
 }
-
 poll();
