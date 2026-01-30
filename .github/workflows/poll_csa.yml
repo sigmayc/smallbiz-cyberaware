@@ -1,8 +1,8 @@
 name: Poll CSA RSS Feed
 on:
   schedule:
-    - cron: '0 * * * *' # Runs exactly every hour
-  workflow_dispatch: # Allows you to run it manually for testing
+    - cron: '0 * * * *'
+  workflow_dispatch:
 
 jobs:
   poll:
@@ -17,7 +17,8 @@ jobs:
           node-version: '20'
 
       - name: Install Dependencies
-        run: npm install rss-parser firebase-admin
+        # This is the magic line that fixes the MODULE_NOT_FOUND error
+        run: npm install 
 
       - name: Run Polling Script
         env:
