@@ -1,0 +1,25 @@
+name: Poll CSA RSS Feed
+on:
+  schedule:
+    - cron: '0 * * * *' # Runs exactly every hour
+  workflow_dispatch: # Allows you to run it manually for testing
+
+jobs:
+  poll:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+
+      - name: Install Dependencies
+        run: npm install rss-parser firebase-admin
+
+      - name: Run Polling Script
+        env:
+          FIREBASE_KEY: ${{ secrets.FIREBASE_SERVICE_ACCOUNT }}
+        run: node poll_script.js
