@@ -10,29 +10,29 @@ admin.initializeApp({
 
 async function poll() {
   try {
-    const { data } = await axios.get('https://www.csa.gov.sg/alerts-and-advisories/alerts');
-    const $ = cheerio.load(data);
-    const db = admin.database();
-
-    // Look for the alert items in the list
-    $('.views-row').each(async (i, el) => {
-      const title = $(el).find('.views-field-title').text().trim();
-      const date = $(el).find('.views-field-created').text().trim();
-      const link = "https://www.csa.gov.sg" + $(el).find('a').attr('href');
-      
-      if (title) {
-        const id = title.replace(/[.#$/[\]]/g, "_");
-        const ref = db.ref('alerts').child(id);
-        const snapshot = await ref.once('value');
-        
-        if (!snapshot.exists()) {
-          await ref.set({ title, date, link });
-          console.log("Added: " + title);
-        }
+    const { data } = await axios.get('https://www.csa.gov.sg/alerts-and-advisories/alerts', {
+      headers: {
+        // This is the most important part to bypass the 403 error
+        'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36',
+        'Accept': 'text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,*/*;q=0.8',
+        'Accept-Language': 'en-US,en;q=0.5',
+        'Referer': 'https://www.google.com/'
       }
     });
+
+    const $ = cheerio.load(data);
+    const db = admin.database();
+    
+    // Add a check to see if we actually found items
+    const alertItems = $('.views-row');
+    console.log(`Found ${alertItems.length} alert items on the page.`);
+
+    alertItems.each(async (i, el) => {
+      // ... your existing extraction logic ...
+    });
+
   } catch (error) {
-    console.error("Error scraping:", error);
+    console.error("Error scraping:", error.message);
   }
 }
 poll();
