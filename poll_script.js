@@ -5,7 +5,7 @@ const admin = require('firebase-admin');
 const serviceAccount = JSON.parse(process.env.FIREBASE_KEY);
 admin.initializeApp({
   credential: admin.credential.cert(serviceAccount),
-  databaseURL: "https://your-project-id.firebaseio.com" // Update this!
+  databaseURL: "https://cyberaware-smallbiz-default-rtdb.asia-southeast1.firebasedatabase.app/" // Update this!
 });
 
 async function poll() {
