@@ -13,19 +13,19 @@ async function poll() {
         const db = admin.database();
 
         // --- MOCK DATA TEST (Optional: Remove after testing) ---
-        const testId = "MOCK_ALERT_2026";
-        const testRef = db.ref(`alerts/${testId}`);
-        const testSnap = await testRef.once('value');
-        if (!testSnap.exists()) {
-            console.log("🛠️ Injecting test alert...");
-            const mockAlert = {
-                title: "TEST: Critical Cyber Alert Simulator",
-                date: "03 Feb 2026",
-                link: "https://www.csa.gov.sg/test-alert"
-            };
-            await testRef.set(mockAlert);
-            await sendNotification(mockAlert.title);
-        }
+        // const testId = "MOCK_ALERT_2026";
+        // const testRef = db.ref(`alerts/${testId}`);
+        // const testSnap = await testRef.once('value');
+        // if (!testSnap.exists()) {
+        //     console.log("🛠️ Injecting test alert...");
+        //     const mockAlert = {
+        //         title: "TEST: Critical Cyber Alert Simulator",
+        //         date: "03 Feb 2026",
+        //         link: "https://www.csa.gov.sg/test-alert"
+        //     };
+        //     await testRef.set(mockAlert);
+        //     await sendNotification(mockAlert.title);
+        // }
         // --- END TEST ---
 
         const { data } = await axios.get('https://www.csa.gov.sg/alerts-and-advisories/alerts', {
