@@ -21,7 +21,7 @@ async function poll() {
             const mockAlert = {
                 title: "Critical Vulnerabilities in Ivanti Endpoint Manager Mobile",
                 date: "30 January 2026",
-                link: "https://www.csa.gov.sg/test-alert"
+                link: "https://www.csa.gov.sg/test-alert",
                 description:"Ivanti has released security updates to address critical vulnerabilities affecting Ivanti Endpoint Manager Mobile (EPMM). Users and administrators are advised to apply the appropriate patches immediately."
             };
             await testRef.set(mockAlert);
