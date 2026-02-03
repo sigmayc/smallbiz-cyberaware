@@ -45,6 +45,9 @@ async function poll() {
             const date = $(el).find('.views-field-created').text().trim();
             const link = "https://www.csa.gov.sg" + $(el).find('a').attr('href');
             
+            const rawDescription = $(el).find('.views-field-field-summary').text().trim(); 
+            const description = rawDescription || "Click the link to view full advisory details.";
+            
             // Create a safe ID for Firebase
             const alertId = Buffer.from(title).toString('base64').substring(0, 20); 
 
@@ -53,7 +56,7 @@ async function poll() {
 
             if (!snapshot.exists()) {
                 console.log(`🆕 New alert: ${title}`);
-                await alertRef.set({ title, date, link });
+                await alertRef.set({ title, date, link, description });
                 await sendNotification(title);
             }
         }
