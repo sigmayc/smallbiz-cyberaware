@@ -36,3 +36,19 @@ async function poll() {
   }
 }
 poll();
+async function sendNotification(alertTitle) {
+  const message = {
+    notification: {
+      title: '⚠️ New CSA Security Alert',
+      body: alertTitle,
+    },
+    topic: 'cyber_alerts' // This must match the topic in your Android app
+  };
+
+  try {
+    const response = await admin.messaging().send(message);
+    console.log('Successfully sent notification:', response);
+  } catch (error) {
+    console.error('Error sending notification:', error);
+  }
+}
