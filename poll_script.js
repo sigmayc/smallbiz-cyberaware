@@ -13,16 +13,16 @@ async function poll() {
         const db = admin.database();
 
         // --- MOCK DATA TEST (Optional: Remove after testing) ---
-        const testId = "test_003";
+        const testId = "test_004";
         const testRef = db.ref(`alerts/${testId}`);
         const testSnap = await testRef.once('value');
         if (!testSnap.exists()) {
             console.log("🛠️ Injecting test alert...");
             const mockAlert = {
-                title: "High Severity Vulnerability in Microsoft Office",
+                title: "High Severity Vulnerability in Cisco Products",
                 date: "28 January 2026",
                 link: "https://www.csa.gov.sg/test-alert",
-                description:"Microsoft has released emergency out-of-band security updates to address a high severity vulnerability (CVE-2026-21509) affecting their Microsoft Office products."
+                description:"Cisco has released security updates to address a high severity vulnerability in their products. Users and administrators of affected products are advised to update to the latest version immediately."
             };
             await testRef.set(mockAlert);
             await sendNotification(mockAlert.title);
