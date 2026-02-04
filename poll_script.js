@@ -13,20 +13,20 @@ async function poll() {
         const db = admin.database();
 
         // --- MOCK DATA TEST (Optional: Remove after testing) ---
-        const testId = "test_005";
-        const testRef = db.ref(`alerts/${testId}`);
-        const testSnap = await testRef.once('value');
-        if (!testSnap.exists()) {
-            console.log("🛠️ Injecting test alert...");
-            const mockAlert = {
-                title: "Critical Vulnerability in Oracle Products",
-                date: "22 January 2026",
-                link: "https://www.csa.gov.sg/test-alert",
-                description:"Oracle has released security updates to address a critical vulnerability affecting Oracle HTTP Server and WebLogic Server Proxy Plug-in. Users and administrators of affected products are advised to update the affected products to the latest version immediately."
-            };
-            await testRef.set(mockAlert);
-            await sendNotification(mockAlert.title);
-        }
+        // const testId = "test_005";
+        // const testRef = db.ref(`alerts/${testId}`);
+        // const testSnap = await testRef.once('value');
+        // if (!testSnap.exists()) {
+        //     console.log("🛠️ Injecting test alert...");
+        //     const mockAlert = {
+        //         title: "Critical Vulnerability in Oracle Products",
+        //         date: "22 January 2026",
+        //         link: "https://www.csa.gov.sg/test-alert",
+        //         description:"Oracle has released security updates to address a critical vulnerability affecting Oracle HTTP Server and WebLogic Server Proxy Plug-in. Users and administrators of affected products are advised to update the affected products to the latest version immediately."
+        //     };
+        //     await testRef.set(mockAlert);
+        //     await sendNotification(mockAlert.title);
+        // }
         // --- END TEST ---
 
         const { data } = await axios.get('https://www.csa.gov.sg/alerts-and-advisories/alerts', {
