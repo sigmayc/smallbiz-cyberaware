@@ -1,4 +1,4 @@
-name: Poll CSA RSS Feed
+name: CSA Alert Scraper
 on:
   schedule:
     - cron: '0 * * * *'
