@@ -13,16 +13,16 @@ async function poll() {
         const db = admin.database();
 
         // --- MOCK DATA TEST (Optional: Remove after testing) ---
-        const testId = "test_004";
+        const testId = "test_005";
         const testRef = db.ref(`alerts/${testId}`);
         const testSnap = await testRef.once('value');
         if (!testSnap.exists()) {
             console.log("🛠️ Injecting test alert...");
             const mockAlert = {
-                title: "High Severity Vulnerability in Cisco Products",
-                date: "28 January 2026",
+                title: "Critical Vulnerability in Oracle Products",
+                date: "22 January 2026",
                 link: "https://www.csa.gov.sg/test-alert",
-                description:"Cisco has released security updates to address a high severity vulnerability in their products. Users and administrators of affected products are advised to update to the latest version immediately."
+                description:"Oracle has released security updates to address a critical vulnerability affecting Oracle HTTP Server and WebLogic Server Proxy Plug-in. Users and administrators of affected products are advised to update the affected products to the latest version immediately."
             };
             await testRef.set(mockAlert);
             await sendNotification(mockAlert.title);
